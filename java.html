@@ -1,0 +1,57 @@
+const gameArea = document.getElementById('game-area');
+const target = document.getElementById('target');
+const scoreDisplay = document.getElementById('score');
+const timerDisplay = document.getElementById('timer');
+
+let score = 0;
+let timeRemaining = 30;
+let gameInterval;
+
+// Déplace le carré à une position aléatoire
+function moveTarget() {
+    const areaWidth = gameArea.offsetWidth;
+    const areaHeight = gameArea.offsetHeight;
+
+    const targetWidth = target.offsetWidth;
+    const targetHeight = target.offsetHeight;
+
+    const randomX = Math.random() * (areaWidth - targetWidth);
+    const randomY = Math.random() * (areaHeight - targetHeight);
+
+    target.style.left = `${randomX}px`;
+    target.style.top = `${randomY}px`;
+}
+
+// Ajoute un point lorsque l'utilisateur clique sur le carré
+target.addEventListener('click', () => {
+    score++;
+    scoreDisplay.textContent = score;
+    moveTarget();
+});
+
+// Décompte du temps
+function startTimer() {
+    gameInterval = setInterval(() => {
+        timeRemaining--;
+        timerDisplay.textContent = `Temps restant : ${timeRemaining}s`;
+
+        if (timeRemaining <= 0) {
+            clearInterval(gameInterval);
+            alert(`Temps écoulé ! Votre score est de ${score}.`);
+            resetGame();
+        }
+    }, 1000);
+}
+
+// Réinitialise le jeu
+function resetGame() {
+    score = 0;
+    timeRemaining = 30;
+    scoreDisplay.textContent = score;
+    timerDisplay.textContent = `Temps restant : 30s`;
+    moveTarget();
+}
+
+// Démarre le jeu
+resetGame();
+startTimer();
